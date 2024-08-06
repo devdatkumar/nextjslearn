@@ -27,13 +27,13 @@ export const { auth, signIn, signOut } = NextAuth({
         if (parsedCredentials.success) {
           const { email, password } = parsedCredentials.data;
           const user = await getUser(email);
-          if (!user) return null;
+          if (!user) return new Response(null, { status: 401 });
           const passwordsMatch = await bcrypt.compare(password, user.password);
 
           if (passwordsMatch) return user;
         }
         console.log("Invalid credentials");
-        return null;
+        return new Response(null, { status: 401 });
       },
     }),
   ],
